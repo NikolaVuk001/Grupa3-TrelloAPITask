@@ -3,14 +3,14 @@ from requests.adapters import HTTPAdapter, Retry
 from requests.exceptions import RetryError
 
 # API i TOKEN
-API = ""
-TOKEN = ""
+API = "42464e41c5b7ac2ca9e11577399d13bd"
+TOKEN = "ATTAa4e4a74262a86c123af88940b3f243aba0bc3298bdfa86d77f20c3074b9d6719BF839615"
 
 # ID mog borda
-BOARD_ID = "d1IUCCHh"
+BOARD_ID = "SqLhSk0r"
 
 # Lista ID
-LIST_ID = "6646043acd85359f0f9bbbaf"
+LIST_ID = "6643bc7dfd53e55fab54c01b"
 
 
 # Funkcija za citanje svih kartca sa board-a
