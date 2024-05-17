@@ -28,10 +28,10 @@ def read_cards(session: requests.Session) -> None:
 
 # Funkcija za dodavanje nove kartice u listu
 def add_card(session: requests.Session) -> None:
-    session.params["idList":str] = LIST_ID
+    session.params["idList"] = LIST_ID
     # Zeljeno ime i deskripciju kartice koje zelimo da unesemo
-    session.params["name":str] = input("Unesi ime kartice: ")
-    session.params["desc":str] = input("Unesite zeljenu deskripciju karte: ")
+    session.params["name"] = input("Unesi ime kartice: ")
+    session.params["desc"] = input("Unesite zeljenu deskripciju karte: ")
 
     # Slanje POST requesta Trellu za dodavanje nove kartice
     response = session.post("https://api.trello.com/1/cards")
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     # Upit korisnika koju funkcijonalnos zeli
     # TODO Ako je moguce formulistie ovo bolje
-    action: str = input("Sta Zelite Da Uradite (Citanje Svih Kartica - 1 | Unos Nove Kartice - 2)\n")
+    action:str = "0"
 
     # Ponovni unos dok ne unese dobar input
     while action != "1" and action != "2":
