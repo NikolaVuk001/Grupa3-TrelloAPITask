@@ -1,5 +1,5 @@
 import requests
-from Config.config import *
+from Config.config import API_KEY, TOKEN
 from requests.adapters import HTTPAdapter, Retry
 from requests.exceptions import HTTPError, RetryError
 
@@ -34,14 +34,14 @@ class TrelloClient:
         finally:
             self.session.close()
 
-    def post(self, endpoint, params=None):
+    def post(self, endpoint, params: dict = None):
         if params is not None:
-            self.session.params += params  # Testirati
+            self.session.params.update(params)
         try:
             response = self.session.post(self.base_url + endpoint)
             response.raise_for_status()
             return response.json()
-
+            pass
         except RetryError:
             print("Retry error occurred.")
         except HTTPError:

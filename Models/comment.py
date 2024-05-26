@@ -5,7 +5,7 @@ from typing import List
 
 from dataclasses_json import dataclass_json
 from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trelloClient import TrelloClient
+from Mod.trello_client import TrelloClient
 
 
 @dataclass_json
@@ -26,6 +26,12 @@ class Comment:
     @staticmethod
     def get_directory() -> str:
         return Comment._directory
+
+    def set_directory(self, directory: str) -> None:
+        if directory is not None and path.isdir(directory):
+            self._directory = directory
+        else:
+            print("Not A Valid Directory")
 
     # Get komentare uz pomoc geta
     @staticmethod

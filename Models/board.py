@@ -4,7 +4,7 @@ from os import path
 
 from dataclasses_json import dataclass_json
 from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trelloClient import TrelloClient
+from Mod.trello_client import TrelloClient
 
 
 @dataclass_json
@@ -21,6 +21,12 @@ class Board:
     # Getter za direktorijum
     def get_directory(self) -> str:
         return self._directory
+
+    def set_directory(self, directory: str) -> None:
+        if directory is not None and path.isdir(directory):
+            self._directory = directory
+        else:
+            print("Not A Valid Directory")
 
     @staticmethod
     def get_board(board_id: str, client: TrelloClient, dir_path: str = _directory):

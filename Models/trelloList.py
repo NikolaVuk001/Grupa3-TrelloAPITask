@@ -5,7 +5,7 @@ from typing import List
 
 from dataclasses_json import dataclass_json
 from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trelloClient import TrelloClient
+from Mod.trello_client import TrelloClient
 
 
 @dataclass_json
@@ -25,6 +25,12 @@ class TrelloList:
 
     def get_directory(self) -> str:
         return self._directory
+
+    def set_directory(self, directory: str) -> None:
+        if directory is not None and path.isdir(directory):
+            self._directory = directory
+        else:
+            print("Not A Valid Directory")
 
     @staticmethod
     def get_lists(board_id: str, client: TrelloClient, dir_path: str = _directory):
@@ -46,7 +52,7 @@ class TrelloList:
                     trello_list._directory = dir_path + f"Lists/{trello_list.name}/"
                 ensure_directory_exists(trello_list._directory)
 
-                with open(trello_list._directory + f"list-{trello_list.id}.json", "w") as f:
+                with open(trello_list._directory + f"trellolist-{trello_list.id}.json", "w") as f:
                     f.write(trello_list.to_json(sort_keys=True, indent=4, separators=(",", ": ")))
 
             return lists

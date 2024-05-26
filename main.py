@@ -1,6 +1,8 @@
-from Mod.board_API_Reader import get_everything
-from Mod.readData import Reader
-from Mod.trelloClient import TrelloClient
+import os
+
+import Mod.API_Caller as API_Caller
+from Mod.reader import Reader
+from Mod.trello_client import TrelloClient
 from Models.board import Board
 from Models.card import Card
 from Models.checklist import CheckList
@@ -16,7 +18,7 @@ if __name__ == "__main__":
 
     # Citanje Celog Boarda
     # --------------------------------------------------------------#
-    # get_everything(board_id="SqLhSk0r", client=client)
+    # API_Caller.get_everything(board_id="SqLhSk0r", client=client)
 
     # Card
     # --------------------------------------------------------------#
@@ -41,9 +43,12 @@ if __name__ == "__main__":
     # Citanje fajlova
     # --------------------------------------------------------------#
     # Citanje iz Vec Postojeceg Board-a
-    # Reader.read_saved_files(trello_object="card", board_name="Zadaci Za Automatizaciju")
+    Reader.read_saved_files(trello_object=Board, board_name="Zadaci Za Automatizaciju", print_result=True)
 
     # Citanje Iz Specificnog fajla
-    # Reader.read_saved_files(trello_object="card", dir_path=os.path.join(os.path.dirname(__file__), "Data/Cards/"))
+    # Reader.read_saved_files(
+    #     trello_object=TrelloList, dir_path=os.path.join(os.path.dirname(__file__), "Data/Lists/"), print_result=True
+    # )
 
     # Dodati Vracanje kartica Na Trello
+    # API_Caller.save_cards_to_trello(board_name="Zadaci Za Automatizaciju", client=client)
