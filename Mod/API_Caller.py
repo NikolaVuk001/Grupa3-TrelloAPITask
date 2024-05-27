@@ -16,7 +16,7 @@ def get_everything(board_id: str, client: TrelloClient):
             cards = Card.get_cards(list_id=trello_list.id, client=client, dir_path=trello_list.get_directory())
             if cards:
                 for card in cards:
-                    if card.badges.get("comments") != 0:
+                    if card.badges.comments != 0:
                         Comment.get_comments(client=client, card_id=card.id, dir_path=card.get_directory())
                         CheckList.get_checklists(client=client, card_id=card.id, dir_path=card.get_directory())
 
@@ -26,7 +26,20 @@ def save_cards_to_trello(board_name: str, client: TrelloClient):
     if cards is not None and cards != []:
         for card in cards:
 
-            card_response = client.post(endpoint="/cards", params=card.to_dict())
+            card_response = client.post(
+                endpoint="/cards",
+                params={
+                    "name": card.name,
+                    "desc": card.desc,
+                    "pos": card.pos,
+                    "due": card.due,
+                    "start": card.start,
+                    "dueComplete": card.dueComplete,
+                    "idList": card.idList,
+                    "idMembers": card.idMembers,
+                    "idLabels": card.idLabels,
+                },
+            )
 
             comments = Reader.read_saved_files(trello_object=Comment, dir_path=card.get_directory())
 

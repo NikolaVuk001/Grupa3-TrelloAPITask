@@ -10,13 +10,68 @@ from Mod.trello_client import TrelloClient
 
 @dataclass_json
 @dataclass
+class Trello:
+    board: int | None
+    card: int | None
+
+
+@dataclass_json
+@dataclass
+class AttachmentsByType:
+    trello: Trello | None
+
+
+@dataclass_json
+@dataclass
+class Badges:
+    attachmentsByType: AttachmentsByType | None
+    comments: int | None
+
+
+@dataclass_json
+@dataclass
+class Cover:
+    idAttachment: str | None
+    color: str | None
+    idUploadedBackground: bool | None
+    size: str | None
+    brightness: str | None
+    idPlugin: str | None
+
+
+@dataclass_json
+@dataclass
 class Card:
-    id: str
-    name: str
-    desc: str
-    idList: str
-    idChecklists: str | None
-    badges: dict
+    id: str | None
+    badges: Badges | None
+    checkItemStates: List[str] | None
+    closed: bool | None
+    dueComplete: bool | None
+    dateLastActivity: str | None
+    desc: str | None
+    due: str | None
+    dueReminder: str | None
+    email: str | None
+    idBoard: str | None
+    idChecklists: List[str] | None
+    idList: str | None
+    idMembers: List[str] | None
+    idMembersVoted: List[str] | None
+    idShort: int | None
+    idAttachmentCover: str | None
+    labels: List[str] | None
+    idLabels: List[str] | None
+    manualCoverAttachment: bool | None
+    name: str | None  #
+    pos: int | None
+    shortLink: str | None
+    shortUrl: str | None
+    start: str | None
+    subscribed: bool | None
+    url: str | None
+    cover: Cover | None
+    isTemplate: bool | None
+    cardRole: str | None
 
     _directory = path.join(path.dirname(__file__), "../Data/Cards/")
 
