@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     # Citanje Celog Boarda
     # --------------------------------------------------------------#
-    # API_Caller.get_everything(board_id="SqLhSk0r", client=client)
+    API_Caller.get_everything(board_id="SqLhSk0r", client=client)
 
     # Card
     # --------------------------------------------------------------#
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # Citanje fajlova
     # --------------------------------------------------------------#
     # Citanje iz Vec Postojeceg Board-a
-    Reader.read_saved_files(trello_object=Board, board_name="Zadaci Za Automatizaciju", print_result=True)
+    # Reader.read_saved_files(trello_object=Board, board_name="Zadaci Za Automatizaciju", print_result=True)
 
     # Citanje Iz Specificnog fajla
     # Reader.read_saved_files(

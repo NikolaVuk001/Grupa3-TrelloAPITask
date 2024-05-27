@@ -11,13 +11,12 @@ from Mod.trello_client import TrelloClient
 @dataclass_json
 @dataclass
 class TrelloList:
-    id: str
-    name: str
-    closed: bool
-    pos: int
-    idBoard: str
-    subscribed: bool
-    softLimit: str | None
+    id: str | None
+    name: str | None
+    closed: bool | None
+    color: str | None
+    idBoard: str | None
+    pos: int | None
 
     _directory = path.join(path.dirname(__file__), "../Data/Lists/")
 

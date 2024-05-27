@@ -41,20 +41,22 @@ class Comment:
 
         result = client.get(f"/cards/{card_id}/actions")
 
-        comments: List[Comment] = []
+        if result is not None:
 
-        for comment_dict in result:
-            comments.append(
-                Comment(
-                    id=comment_dict.get("id"),
-                    text=comment_dict.get("data").get("text"),
-                    card_id=comment_dict.get("data").get("card").get("id"),
+            comments: List[Comment] = []
+
+            for comment_dict in result:
+                comments.append(
+                    Comment(
+                        id=comment_dict.get("id"),
+                        text=comment_dict.get("data").get("text"),
+                        card_id=comment_dict.get("data").get("card").get("id"),
+                    )
                 )
-            )
-        for comment in comments:
-            comment._directory = dir_path + f"Comments/"
-            ensure_directory_exists(comment._directory)
-            with open(comment._directory + f"comment-{comment.id}.json", "w") as f:
-                json.dump(comment, f, default=lambda o: o.__dict__, indent=4)
+            for comment in comments:
+                comment._directory = dir_path + f"Comments/"
+                ensure_directory_exists(comment._directory)
+                with open(comment._directory + f"comment-{comment.id}.json", "w") as f:
+                    json.dump(comment, f, default=lambda o: o.__dict__, indent=4)
 
-        # return comments <<< Ako je potrebno vratiti listu dobijenih komentara
+            # return comments <<< Ako je potrebno vratiti listu dobijenih komentara

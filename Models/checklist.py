@@ -7,15 +7,29 @@ from dataclasses_json import dataclass_json
 from Mod.check_dir_existence import ensure_directory_exists
 from Mod.trello_client import TrelloClient
 
-from .checkItem import CheckItem
+
+@dataclass_json
+@dataclass
+class CheckItems:
+    id: str | None
+    name: str | None
+    pos: int | None
+    state: str | None
+    due: str | None
+    dueReminder: str | None
+    idMember: str | None
+    idChecklist: str | None
 
 
 @dataclass_json
 @dataclass
 class CheckList:
-    id: str
-    name: str
-    checkItems: List[CheckItem]
+    id: str | None
+    name: str | None
+    idBoard: str | None
+    idCard: str | None
+    pos: int | None
+    checkItems: List[CheckItems] | None
 
     _directory = path.join(path.dirname(__file__), "../Data/CheckLists/")
 
