@@ -1,13 +1,4 @@
-import os
-
-import Mod.API_Caller as API_Caller
-from Mod.reader import Reader
-from Mod.trello_client import TrelloClient
-from Models.board import Board
-from Models.card import Card
-from Models.checklist import CheckList
-from Models.comment import Comment
-from Models.trelloList import TrelloList
+from src.common.trello_client.trello_client import TrelloClient
 
 if __name__ == "__main__":
 
@@ -18,7 +9,7 @@ if __name__ == "__main__":
 
     # Citanje Celog Boarda
     # --------------------------------------------------------------#
-    API_Caller.get_everything(board_id="SqLhSk0r", client=client)
+    # API_Caller.get_everything(board_id="SqLhSk0r", client=client)
 
     # Card
     # --------------------------------------------------------------#

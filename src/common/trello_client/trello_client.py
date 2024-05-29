@@ -1,7 +1,7 @@
 import requests
-from Config.config import API_KEY, TOKEN
 from requests.adapters import HTTPAdapter, Retry
 from requests.exceptions import HTTPError, RetryError
+from src.Config.config import API_KEY, TOKEN
 
 
 class TrelloClient:

@@ -3,11 +3,11 @@ import os
 from pathlib import Path
 from typing import List, Union
 
-from Models.board import Board
-from Models.card import Card
-from Models.checklist import CheckList
-from Models.comment import Comment
-from Models.trelloList import TrelloList
+from src.Models.board import Board
+from src.Models.card import Card
+from src.Models.checklist import CheckList
+from src.Models.comment import Comment
+from src.Models.trelloList import TrelloList
 
 
 class Reader:
