@@ -4,8 +4,10 @@ from os import path
 from typing import List
 
 from dataclasses_json import dataclass_json
-from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trello_client import TrelloClient
+from sqlalchemy import JSON, Boolean, Column, ForeignKey, Integer, String, Table
+from src.common.trello_client.trello_client import TrelloClient
+from src.file_operations.check_dir_existence import ensure_directory_exists
+from src.orm.orm_mapper import mapper_registry
 
 
 @dataclass_json
@@ -39,12 +41,47 @@ class Cover:
     idPlugin: str | None
 
 
+@mapper_registry.mapped
 @dataclass_json
 @dataclass
 class Card:
+
+    __table__ = Table(
+        "card",
+        mapper_registry.metadata,
+        Column("id", String, primary_key=True),
+        Column("badges", JSON),
+        # Column("checkItemStates", String),
+        Column("closed", Boolean),
+        Column("dueComplete", Boolean),
+        Column("dateLastActivity", String),
+        Column("desc", String),
+        Column("due", String),
+        Column("dueReminder", String),
+        Column("email", String),
+        Column("idBoard", String, ForeignKey("board.id")),
+        Column("idList", String, ForeignKey("trelloList.id")),
+        # Column("idMembers", String),
+        # Column("idMembersVoted", String),
+        Column("idShort", Integer),
+        Column("idAttachmentCover", String),
+        # Column("labels", String),
+        # Column("idLabels", String),
+        Column("manualCoverAttachment", Boolean),
+        Column("name", String),
+        Column("pos", Integer),
+        Column("shortLink", String),
+        Column("shortUrl", String),
+        Column("start", String),
+        Column("subscribed", Boolean),
+        Column("url", String),
+        Column("cover", JSON),  # JSON
+        Column("isTemplate", Boolean),
+        Column("cardRole", String),
+    )
     id: str | None
-    badges: Badges | None
-    checkItemStates: List[str] | None
+    badges: dict | None  # Promenjeno Sa Badges kalse
+    # checkItemStates: List[str] | None  # Problem Kako Upisati List[str] u bazu
     closed: bool | None
     dueComplete: bool | None
     dateLastActivity: str | None
@@ -53,23 +90,23 @@ class Card:
     dueReminder: str | None
     email: str | None
     idBoard: str | None
-    idChecklists: List[str] | None
-    idList: str | None
-    idMembers: List[str] | None
-    idMembersVoted: List[str] | None
+    # idChecklists: List[str] | None Dodati List[CheckList] kao listu svih checklisti unutar Carda
+    idList: str | None  # Referenca Na List
+    # idMembers: List[str] | None
+    # idMembersVoted: List[str] | None
     idShort: int | None
     idAttachmentCover: str | None
-    labels: List[str] | None
-    idLabels: List[str] | None
+    # labels: List[str] | None
+    # idLabels: List[str] | None
     manualCoverAttachment: bool | None
-    name: str | None  #
+    name: str | None
     pos: int | None
     shortLink: str | None
     shortUrl: str | None
     start: str | None
     subscribed: bool | None
     url: str | None
-    cover: Cover | None
+    cover: dict | None
     isTemplate: bool | None
     cardRole: str | None
 

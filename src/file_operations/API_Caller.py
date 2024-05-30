@@ -1,11 +1,10 @@
-from Models.board import Board
-from Models.card import Card
-from Models.checklist import CheckList
-from Models.comment import Comment
-from Models.trelloList import TrelloList
-
-from Mod.reader import Reader
-from Mod.trello_client import TrelloClient
+from src.common.trello_client.trello_client import TrelloClient
+from src.file_operations.reader import Reader
+from src.models.board import Board
+from src.models.card import Card
+from src.models.checklist import CheckList
+from src.models.comment import Comment
+from src.models.trelloList import TrelloList
 
 
 def get_everything(board_id: str, client: TrelloClient):
@@ -16,7 +15,7 @@ def get_everything(board_id: str, client: TrelloClient):
             cards = Card.get_cards(list_id=trello_list.id, client=client, dir_path=trello_list.get_directory())
             if cards:
                 for card in cards:
-                    if card.badges.comments != 0:
+                    if card.badges.get("comments") != 0:
                         Comment.get_comments(client=client, card_id=card.id, dir_path=card.get_directory())
                         CheckList.get_checklists(client=client, card_id=card.id, dir_path=card.get_directory())
 

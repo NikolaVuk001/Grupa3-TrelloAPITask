@@ -4,8 +4,10 @@ from os import path
 from typing import List
 
 from dataclasses_json import dataclass_json
-from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trello_client import TrelloClient
+from sqlalchemy import JSON, Boolean, Column, String, Table
+from src.common.trello_client.trello_client import TrelloClient
+from src.file_operations.check_dir_existence import ensure_directory_exists
+from src.orm.orm_mapper import mapper_registry
 
 
 @dataclass_json
@@ -82,9 +84,26 @@ class LabelNames:
     black_light: str | None
 
 
+@mapper_registry.mapped
 @dataclass_json
 @dataclass
 class Board:
+    __table__ = Table(
+        "board",
+        mapper_registry.metadata,
+        Column("id", String, primary_key=True),
+        Column("name", String),
+        Column("desc", String),
+        Column("descData", String),
+        Column("closed", Boolean),
+        Column("idOrganization", String),
+        Column("idEnterprise", String),
+        Column("pinned", Boolean),
+        Column("url", String),
+        Column("shortUrl", String),
+        Column("prefs", JSON),
+        Column("labelNames", JSON),
+    )
     id: str | None
     name: str | None
     desc: str | None
@@ -95,8 +114,8 @@ class Board:
     pinned: bool | None
     url: str | None
     shortUrl: str | None
-    prefs: Prefs | None
-    labelNames: LabelNames | None
+    prefs: dict | None  # prefs: Prefs | None Promenjeno
+    labelNames: dict | None  # labelNames: LabelNames | None
 
     _directory = path.join(path.dirname(__file__), "../Data/Board/")
 
