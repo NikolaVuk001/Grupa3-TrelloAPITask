@@ -6,7 +6,7 @@ from typing import List
 from dataclasses_json import dataclass_json
 from sqlalchemy import Column, ForeignKey, String, Table
 from src.common.trello_client.trello_client import TrelloClient
-from src.Mod.check_dir_existence import ensure_directory_exists
+from src.file_operations.check_dir_existence import ensure_directory_exists
 from src.orm.orm_mapper import mapper_registry
 
 

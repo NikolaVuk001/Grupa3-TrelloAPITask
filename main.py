@@ -1,45 +1,57 @@
 from src.common.trello_client.trello_client import TrelloClient
+from src.file_operations.API_Caller import get_everything
+from src.file_operations.reader import Reader
+from src.Models.board import Board
+from src.Models.card import Card
+from src.Models.checklist import CheckItem, CheckList
+from src.Models.comment import Comment
+from src.Models.trelloList import TrelloList
+from src.orm.db_connection import DB_Connection
+
+
+def create_object(trello_obj):
+    data = Reader.read_saved_files(trello_object=trello_obj, board_name="Zadaci Za Automatizaciju", print_result=False)
+    DB_Connection.add_object(data)
+
 
 if __name__ == "__main__":
 
-    # Instanciranje Clienta
-    client = TrelloClient()
+    # Kupljenje Date Sa Trello Boarda
+    # client = TrelloClient()  # Radi
+    # get_everything(board_id="SqLhSk0r", client=client)
 
-    # Instanciranje i Cuvanje Fajlova sa API-a:
+    # Pravaljenje Tabela U Bazi
+    # DB_Connection.create_tables()
 
-    # Citanje Celog Boarda
-    # --------------------------------------------------------------#
-    # API_Caller.get_everything(board_id="SqLhSk0r", client=client)
+    # CRUD
+
+    # Create
+    # Board
+    # create_object(Board)
+
+    # Trello List
+    # create_object(TrelloList)
 
     # Card
-    # --------------------------------------------------------------#
-    # Card.get_cards(list_id="6643bc7dfd53e55fab54c01b", client=client)
+    # create_object(Card)
 
-    # Board
-    # --------------------------------------------------------------#
-    # Board.get_board(board_id="SqLhSk0r", client=client)
+    # CheckList
+    # create_object(CheckList)
 
-    # Liste
-    # --------------------------------------------------------------#
-    # TrelloList.get_lists(board_id="SqLhSk0r", client=client)
+    # Comment
+    # create_object(Comment)
 
-    # Comments
-    # --------------------------------------------------------------#
-    # Comment.get_comments(client=client, card_id="66446b2db5f3ce241dc6f371")
+    # Read All
+    # data = DB_Connection.get_object(trello_object=Card)
+    # print(data)
 
-    # Check Liste
-    # --------------------------------------------------------------#
-    # CheckList.get_checklists(card_id="6643bc7eacb9bfbb99d9358f", client=client)
+    # Update
+    # data = DB_Connection.get_object(trello_object=Card)
+    # print(data[1].name)
+    # data[0].name = "Nauciti SQLAlchemy"
+    # DB_Connection.update_object(data[0])
 
-    # Citanje fajlova
-    # --------------------------------------------------------------#
-    # Citanje iz Vec Postojeceg Board-a
-    # Reader.read_saved_files(trello_object=Board, board_name="Zadaci Za Automatizaciju", print_result=True)
+    # Delete
+    # DB_Connection.delete_object(trello_object=CheckItem, id="6653b2a2079491a72c388d65")
 
-    # Citanje Iz Specificnog fajla
-    # Reader.read_saved_files(
-    #     trello_object=TrelloList, dir_path=os.path.join(os.path.dirname(__file__), "Data/Lists/"), print_result=True
-    # )
-
-    # Dodati Vracanje kartica Na Trello
-    # API_Caller.save_cards_to_trello(board_name="Zadaci Za Automatizaciju", client=client)
+    pass
