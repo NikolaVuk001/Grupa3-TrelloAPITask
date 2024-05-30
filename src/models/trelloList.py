@@ -4,13 +4,26 @@ from os import path
 from typing import List
 
 from dataclasses_json import dataclass_json
-from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trello_client import TrelloClient
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from src.common.trello_client.trello_client import TrelloClient
+from src.file_operations.check_dir_existence import ensure_directory_exists
+from src.orm.orm_mapper import mapper_registry
 
 
+@mapper_registry.mapped
 @dataclass_json
 @dataclass
 class TrelloList:
+    __table__ = Table(
+        "trelloList",
+        mapper_registry.metadata,
+        Column("id", String, primary_key=True),
+        Column("name", String),
+        Column("closed", Boolean),
+        Column("color", String),
+        Column("idBoard", String, ForeignKey("board.id")),
+        Column("pos", Integer),
+    )
     id: str | None
     name: str | None
     closed: bool | None

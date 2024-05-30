@@ -1,16 +1,32 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from os import path
 from typing import List
 
 from dataclasses_json import dataclass_json
-from Mod.check_dir_existence import ensure_directory_exists
-from Mod.trello_client import TrelloClient
+from sqlalchemy import Column, ForeignKey, Integer, String, Table
+from sqlalchemy.orm import relationship
+from src.common.trello_client.trello_client import TrelloClient
+from src.file_operations.check_dir_existence import ensure_directory_exists
+from src.orm.orm_mapper import mapper_registry
 
 
+@mapper_registry.mapped
 @dataclass_json
 @dataclass
-class CheckItems:
+class CheckItem:
+    __table__ = Table(
+        "checkItem",
+        mapper_registry.metadata,
+        Column("id", String, primary_key=True),
+        Column("name", String),
+        Column("pos", Integer),
+        Column("state", String),
+        Column("due", String),
+        Column("dueReminder", String),
+        Column("idMember", String),
+        Column("idChecklist", String, ForeignKey("checkList.id")),
+    )
     id: str | None
     name: str | None
     pos: int | None
@@ -21,15 +37,34 @@ class CheckItems:
     idChecklist: str | None
 
 
+@mapper_registry.mapped
 @dataclass_json
 @dataclass
 class CheckList:
+    __table__ = Table(
+        "checkList",
+        mapper_registry.metadata,
+        Column("id", String, primary_key=True),
+        Column("name", String),
+        Column("idBoard", String, ForeignKey("board.id")),
+        Column("idCard", String, ForeignKey("card.id")),
+        Column("pos", Integer),
+        Column("dueReminder", String),
+        Column("idMember", String),
+        Column("idChecklist", String, ForeignKey("checkList.id")),
+    )
     id: str | None
     name: str | None
     idBoard: str | None
     idCard: str | None
     pos: int | None
-    checkItems: List[CheckItems] | None
+    checkItems: List[CheckItem] | None = field(default_factory=list)
+
+    __mapper_args__ = {
+        "properties": {
+            "checkItems": relationship("CheckItem"),
+        }
+    }
 
     _directory = path.join(path.dirname(__file__), "../Data/CheckLists/")
 
