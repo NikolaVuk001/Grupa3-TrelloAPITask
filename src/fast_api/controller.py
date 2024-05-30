@@ -1,6 +1,8 @@
 import json
+import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import JSONResponse
 from src.common.trello_client.trello_client import TrelloClient
 from src.fast_api.pydantic_models.models import CardModel, TrelloListModel
 from src.models.board import Board
@@ -37,7 +39,7 @@ async def get_board(board_id: str):
         return result
 
     else:
-        return {"Message": "No Board Found With That ID"}
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"Message": "No Board Found With That ID"})
 
 
 @app.get("/cards/{card_id}")
@@ -50,7 +52,7 @@ async def get_card(card_id: str):
         result["comments"] = [{"id": comment.id, "text": comment.text} for comment in comments] if comments else []
         return result
     else:
-        return {"Message": "No Card Found With That ID"}
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"Message": "No Card Found With That ID"})
 
 
 @app.get("/lists/{list_id}")
@@ -60,11 +62,13 @@ async def get_list(list_id: str):
         result = trello_list.to_dict()
         return result
     else:
-        return {"Message": "No Trello List Found With That ID"}
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST, content={"Message": "No Trello List Found With That ID"}
+        )
 
 
 @app.post("/card")
-async def add_card(card: CardModel):
+def add_card(card: CardModel):
     if card is not None:
 
         client = TrelloClient()
@@ -77,16 +81,19 @@ async def add_card(card: CardModel):
 
             get_response = client.get(endpoint=f"/cards/{post_response.get('id')}")
 
-            new_card = Card.from_json(json.dumps(get_response))
+            new_card: Card = Card.from_json(json.dumps(get_response))
 
-            DB_Connection.add_object(trello_object=new_card)
-
-            return {"Message": "Uspesno Dodavanje Kartice"}  # Zameniti Ovo Da Vraca Iz Baze Ceo Objekat Kartice
+            if DB_Connection.add_object(trello_object=new_card):
+                return JSONResponse(status_code=status.HTTP_201_CREATED, content=get_response)
         else:
-            return {"Message": "Error With Trello API"}
+            return JSONResponse(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={"Message": "Error With Trello API"}
+            )
 
     else:
-        return {"Message": "You Didnt Pass A Valid Card Object"}
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST, content={"Message": "You Didnt Pass A Valid Card Object"}
+        )
 
 
 @app.post("/list")
@@ -104,12 +111,15 @@ async def add_list(list: TrelloListModel):
 
             new_trello_list = TrelloList.from_json(json.dumps(get_response))
 
-            DB_Connection.add_object(trello_object=new_trello_list)
-
-            return {"Message": "Uspesno Dodavanje Liste"}  # Zameniti Ovo Da Vraca Iz Baze Ceo Objekat Liste
+            if DB_Connection.add_object(trello_object=new_trello_list):
+                return JSONResponse(status_code=status.HTTP_201_CREATED, content=get_response)
 
         else:
-            return {"Message": "Error With Trello API"}
+            return JSONResponse(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content={"Message": "Error With Trello API"}
+            )
 
     else:
-        return {"Message": "You Didnt Pass A Valid List Object"}
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST, content={"Message": "You Didnt Pass A Valid Trello List Object"}
+        )

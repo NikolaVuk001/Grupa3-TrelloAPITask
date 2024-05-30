@@ -33,13 +33,14 @@ class DB_Connection:
                 else:
                     session.add(trello_object)
 
-            except sqlalchemy.exc.SQLAlchemyError as e:  # Hvatanje Errora Kako?
+            except sqlalchemy.exc.SQLAlchemyError as e:
                 session.rollback()
                 print(e)
             except Exception as e:
                 print(e)
             else:
                 session.commit()
+                return True
 
     @staticmethod
     def get_all_objects(
@@ -90,6 +91,9 @@ class DB_Connection:
                     setattr(data, key, value)
                 try:
                     session.commit()
+                except sqlalchemy.exc.SQLAlchemyError as e:  # Hvatanje Errora Kako?
+                    session.rollback()
+                    print(e)
                 except Exception as e:
                     print(e)
             else:
@@ -103,7 +107,10 @@ class DB_Connection:
                 try:
                     session.delete(result)
                     session.commit()
-                except Exception as e:  # Koj Error Bi Ovde Trebao?
+                except sqlalchemy.exc.SQLAlchemyError as e:  # Hvatanje Errora Kako?
+                    session.rollback()
+                    print(e)
+                except Exception as e:
                     print(e)
             else:
                 print(f"No {trello_object} with id: {id} in database")
