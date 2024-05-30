@@ -1,10 +1,10 @@
 from src.common.trello_client.trello_client import TrelloClient
 from src.file_operations.reader import Reader
-from src.Models.board import Board
-from src.Models.card import Card
-from src.Models.checklist import CheckList
-from src.Models.comment import Comment
-from src.Models.trelloList import TrelloList
+from src.models.board import Board
+from src.models.card import Card
+from src.models.checklist import CheckList
+from src.models.comment import Comment
+from src.models.trelloList import TrelloList
 
 
 def get_everything(board_id: str, client: TrelloClient):

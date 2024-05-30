@@ -1,11 +1,12 @@
 from src.common.trello_client.trello_client import TrelloClient
+from src.fast_api.controller import app
 from src.file_operations.API_Caller import get_everything
 from src.file_operations.reader import Reader
-from src.Models.board import Board
-from src.Models.card import Card
-from src.Models.checklist import CheckItem, CheckList
-from src.Models.comment import Comment
-from src.Models.trelloList import TrelloList
+from src.models.board import Board
+from src.models.card import Card
+from src.models.checklist import CheckItem, CheckList
+from src.models.comment import Comment
+from src.models.trelloList import TrelloList
 from src.orm.db_connection import DB_Connection
 
 
@@ -46,7 +47,7 @@ if __name__ == "__main__":
     # print(data)
 
     # Update
-    # data = DB_Connection.get_object(trello_object=Card)
+    # data = DB_Connection.get_all_objects(trello_object=Card)
     # print(data[1].name)
     # data[0].name = "Nauciti SQLAlchemy"
     # DB_Connection.update_object(data[0])

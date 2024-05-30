@@ -5,11 +5,11 @@ from typing import List, Union
 import sqlalchemy.exc
 from sqlalchemy import URL, Engine, create_engine
 from sqlalchemy.orm import Session, registry
-from src.Models.board import Board
-from src.Models.card import Card
-from src.Models.checklist import CheckList
-from src.Models.comment import Comment
-from src.Models.trelloList import TrelloList
+from src.models.board import Board
+from src.models.card import Card
+from src.models.checklist import CheckList
+from src.models.comment import Comment
+from src.models.trelloList import TrelloList
 from src.orm.orm_mapper import mapper_registry
 
 
@@ -36,19 +36,49 @@ class DB_Connection:
             except sqlalchemy.exc.SQLAlchemyError as e:  # Hvatanje Errora Kako?
                 session.rollback()
                 print(e)
+            except Exception as e:
+                print(e)
             else:
                 session.commit()
 
     @staticmethod
-    def get_object(
+    def get_all_objects(
         trello_object: Union[Card, Board, CheckList, Comment, TrelloList]
     ) -> List[Union[Card, Board, CheckList, Comment, TrelloList]]:
         with Session(DB_Connection._engine) as session:
             try:
                 data = session.query(trello_object).all()
                 return data
-            except:  # Koj Error Bi Ovde Trebao?
-                print("ERROR")
+            except Exception as e:  # Koj Error Bi Ovde Trebao?
+                print(e)
+
+    @staticmethod
+    def get_object_by_id(trello_object: Union[Card, Board, CheckList, Comment, TrelloList], id: str):
+        with Session(DB_Connection._engine) as session:
+            try:
+                data = session.query(trello_object).filter_by(id=id).one_or_none()
+                return data
+            except Exception as e:
+                print(e)
+
+    @staticmethod
+    def get_object_by_attr(
+        trello_object: Union[Card, Board, CheckList, Comment, TrelloList],
+        attr_name: str,
+        attr_value: str,
+        columns: List[str] = None,
+    ):
+        with Session(DB_Connection._engine) as session:
+            try:
+                filter_condition = {attr_name: attr_value}
+                if columns:
+                    column_names = [getattr(trello_object, column) for column in columns]
+                    data = session.query(trello_object).with_entities(*column_names).filter_by(**filter_condition).all()
+                else:
+                    data = session.query(trello_object).filter_by(**filter_condition).all()
+                return data
+            except Exception as e:
+                print(e)
 
     @staticmethod
     def update_object(trello_object: Union[Card, Board, CheckList, Comment, TrelloList]):  # Ne Radi
@@ -58,7 +88,10 @@ class DB_Connection:
             if data is not None:
                 for key, value in trello_object.to_dict().items():
                     setattr(data, key, value)
-                session.commit()
+                try:
+                    session.commit()
+                except Exception as e:
+                    print(e)
             else:
                 print("Cant Find Trello Object In DataBase")
 
@@ -70,8 +103,8 @@ class DB_Connection:
                 try:
                     session.delete(result)
                     session.commit()
-                except:  # Koj Error Bi Ovde Trebao?
-                    print("ERROR")
+                except Exception as e:  # Koj Error Bi Ovde Trebao?
+                    print(e)
             else:
                 print(f"No {trello_object} with id: {id} in database")
 
