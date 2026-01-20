@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # Kupljenje Date Sa Trello Boarda
     # client = TrelloClient()  # Radi
-    # get_everything(board_id="SqLhSk0r", client=client)
+    # get_everything(board_id="", client=client)
 
     # Pravaljenje Tabela U Bazi
     # DB_Connection.create_tables()
@@ -53,6 +53,6 @@ if __name__ == "__main__":
     # DB_Connection.update_object(data[0])
 
     # Delete
-    # DB_Connection.delete_object(trello_object=CheckItem, id="6653b2a2079491a72c388d65")
+    # DB_Connection.delete_object(trello_object=CheckItem, id="")
 
     pass
